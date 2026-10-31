@@ -5,6 +5,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { getDb, initializeDatabase, closeDatabase } = require('./db/database');
@@ -20,8 +21,14 @@ const notificationRoutes = require('./routes/notifications');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.set('trust proxy', 1);
+
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(...process.env.CLIENT_URL.split(',').map(u => u.trim()).filter(Boolean));
+}
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json());
@@ -43,11 +50,15 @@ app.get('/api/health', async (req, res, next) => {
   }
 });
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+// Serve the built frontend only if it exists (not the case when the frontend is hosted on Vercel)
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+if (process.env.NODE_ENV === 'production' && fs.existsSync(path.join(clientDist, 'index.html'))) {
+  app.use(express.static(clientDist));
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+    res.sendFile(path.join(clientDist, 'index.html'));
   });
+} else {
+  app.get('/', (req, res) => res.json({ status: 'ok', service: 'food-donation-api' }));
 }
 
 app.use((error, req, res, next) => {
