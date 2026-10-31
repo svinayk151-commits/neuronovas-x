@@ -128,4 +128,5 @@ All authenticated endpoints use the JWT cookie set by login/register.
 The same limitations are available in the app footer, listing detail pages, and [Food Safety and Limitations](docs/SAFETY_AND_LIMITATIONS.md).
 #   n e u r o n o v a s - x  
  #   n e u r o n o v a s - x  
+ #   n e u r o - n o v a s  
  
