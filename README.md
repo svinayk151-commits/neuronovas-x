@@ -23,7 +23,7 @@ Use the direct PostgreSQL connection URI from Supabase as `DATABASE_URL`. Keep `
 
 The frontend is deployed to Vercel, while the Express API runs as a long-lived Node service on Render. The API runs a periodic expiry job, so it should not be deployed as a Vercel serverless function.
 
-1. Deploy the repository root as a Render Node web service. Use `npm install` as the build command and `npm run server` as the start command. Configure `DATABASE_URL` with the Supabase PostgreSQL connection URI, `JWT_SECRET` with a strong random secret, and `NODE_ENV` as `production`.
+1. Deploy a Render Node web service with **Root Directory** `server`, **Build Command** `npm install`, and **Start Command** `npm start`. The server package manifest is in `server/package.json`. Configure `DATABASE_URL` with the Supabase PostgreSQL connection URI, `JWT_SECRET` with a strong random secret, and `NODE_ENV` as `production`.
 2. In [client/vercel.json](client/vercel.json), make sure the `/api` rewrite destination points to the public URL of your Render API. The checked-in value is `https://neuronovas-x.onrender.com`.
 3. Import the repository into Vercel. Recommended: set **Root Directory** to `client`, use `npm run build` as the build command, and `dist` as the output directory. If you leave **Root Directory** at the repository root, use `npm run build --prefix client` as the build command and `client/dist` as the output directory instead. The root and client folders both contain the Vercel rewrite config for these two setups. No frontend secrets or environment variables are needed.
 4. After both services finish deploying, open `https://<your-render-service>/api/health` and then test the Vercel site, including login and refresh on a nested page.
