@@ -25,7 +25,7 @@ The frontend is deployed to Vercel, while the Express API runs as a long-lived N
 
 1. Deploy the repository root as a Render Node web service. Use `npm install` as the build command and `npm run server` as the start command. Configure `DATABASE_URL` with the Supabase PostgreSQL connection URI, `JWT_SECRET` with a strong random secret, and `NODE_ENV` as `production`.
 2. In [client/vercel.json](client/vercel.json), make sure the `/api` rewrite destination points to the public URL of your Render API. The checked-in value is `https://neuronovas-x.onrender.com`.
-3. Import the repository into Vercel and set **Root Directory** to `client`. Use `npm run build` as the build command and `dist` as the output directory. No frontend secrets or environment variables are needed; `/api` requests are proxied through the Vercel rewrite.
+3. Import the repository into Vercel. Recommended: set **Root Directory** to `client`, use `npm run build` as the build command, and `dist` as the output directory. If you leave **Root Directory** at the repository root, use `npm run build --prefix client` as the build command and `client/dist` as the output directory instead. The root and client folders both contain the Vercel rewrite config for these two setups. No frontend secrets or environment variables are needed.
 4. After both services finish deploying, open `https://<your-render-service>/api/health` and then test the Vercel site, including login and refresh on a nested page.
 
 Keep `DATABASE_URL` and `JWT_SECRET` only in the Render service's environment settings. If using a different API host, update the rewrite destination before deploying the frontend.
@@ -144,4 +144,5 @@ The same limitations are available in the app footer, listing detail pages, and 
  #   n e u r o - n o v a s  
  #   n e u r o - n o v a s  
  #   n e u r o - n o v a s  
+ #   f o o d - d o n a r  
  
