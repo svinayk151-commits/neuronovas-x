@@ -9,10 +9,11 @@ const { getDb } = require('../db/database');
 const { requireAuth, JWT_SECRET } = require('../middleware/auth');
 
 const router = asyncRouter();
+const isProduction = process.env.NODE_ENV === 'production';
 const COOKIE_OPTS = {
   httpOnly: true,
-  sameSite: 'lax',
-  secure: false, // demo – no HTTPS
+  sameSite: isProduction ? 'none' : 'lax',
+  secure: isProduction,
   maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
 };
 
@@ -70,7 +71,8 @@ router.post('/login', async (req, res) => {
 
 // POST /api/auth/logout
 router.post('/logout', (req, res) => {
-  res.clearCookie('token');
+  const { maxAge, ...clearCookieOptions } = COOKIE_OPTS;
+  res.clearCookie('token', clearCookieOptions);
   res.json({ message: 'Logged out' });
 });
 

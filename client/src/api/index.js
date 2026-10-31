@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+const defaultApiBaseUrl = import.meta.env.PROD
+  ? 'https://neuronovas-x.onrender.com/api'
+  : '/api';
+const apiBaseUrl = (import.meta.env.VITE_API_URL || defaultApiBaseUrl).replace(/\/+$/, '');
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: apiBaseUrl,
   withCredentials: true,
 });
 

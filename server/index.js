@@ -23,7 +23,11 @@ const PORT = process.env.PORT || 3001;
 
 app.set('trust proxy', 1);
 
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://food-donation-flatform.vercel.app'
+];
 if (process.env.CLIENT_URL) {
   allowedOrigins.push(...process.env.CLIENT_URL.split(',').map(u => u.trim()).filter(Boolean));
 }
